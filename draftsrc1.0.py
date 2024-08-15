@@ -8,12 +8,16 @@ pytesseract.pytesseract.tesseract_cmd =r"C:\Program Files\Tesseract-OCR\tesserac
 time.sleep(3)
 
 screenshot = pyautogui.screenshot(region=(1300, 110, 420, 1000))
-screenshot.save("champ.png")
+screenshot.save("pick_1.png")
 
-imagen = Image.open('champ.png')
-champs = pytesseract.image_to_string(imagen, lang='eng')
+image = Image.open('pick_1.png')
+champs = pytesseract.image_to_string(image, lang='eng')
 
-picks = []
+screenshot_allies = pyautogui.screenshot(region=(100, 110, 450, 800))
+screenshot_allies.save("allies_1.png")
+
+image_allies = Image.open('allies_1.png')
+ally1 = pytesseract.image_to_string(image_allies, lang='eng')
 
 champion_ids = {
     "AATROX": "266",
@@ -177,16 +181,24 @@ champion_ids = {
     "ZYRA": "143"
 }
 
+picks = []
 for champ, id in champion_ids.items():
     if champ in champs:
         picks.append(id)
 
 pick_1 = ",".join(picks)
 
+allies_list = []
+for champ1, id in champion_ids.items():
+    if champ1 in ally1 and id not in picks: 
+        allies_list.append(id)
+
+allies_1 = ",".join(allies_list)
+
 time.sleep(1)
 
 def generate_url(pick_1):
-    url = f"https://www.metasrc.com/lol/counter-picker?enemies={pick_1}"
+    url = f"https://www.metasrc.com/lol/counter-picker?allies={allies_1}&enemies={pick_1}"
     webbrowser.open(url)
 
 generate_url(pick_1)
